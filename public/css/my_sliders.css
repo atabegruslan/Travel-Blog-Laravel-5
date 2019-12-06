@@ -1,0 +1,13 @@
+#slides-holder-1 {
+	top: 5px;
+}
+#slides-holder-2 {
+	top: 40px;
+}
+
+#slides-holder-1 .slider .title, #slides-holder-1 .slider .dots {
+	background-color: #180c4b;
+}
+#slides-holder-2 .slider .title, #slides-holder-2 .slider .dots {
+	background-color: #14131a;
+}

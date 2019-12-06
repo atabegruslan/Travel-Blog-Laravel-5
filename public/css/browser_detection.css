@@ -1,0 +1,11 @@
+#app{
+	background-color: black;
+	padding: 10px;
+}
+#app a{
+	text-decoration: none;
+	color: white;
+}
+#app a p{
+	text-align: : center;
+}

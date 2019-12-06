@@ -1,0 +1,87 @@
+@font-face {
+  font-family: 'flexslider-icon';
+  src: url("../fonts/flexslider-icon.eot");
+  src: url("../fonts/flexslider-icon.eot?#iefix") format("embedded-opentype"), url("../fonts/flexslider-icon.woff") format("woff"), url("../fonts/flexslider-icon.ttf") format("truetype"), url("../fonts/flexslider-icon.svg#flexslider-icon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/* line 12, ../sass/slider.scss */
+.slider {
+  overflow: hidden;
+}
+/* line 15, ../sass/slider.scss */
+.slider .slideshow {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+/* line 20, ../sass/slider.scss */
+.slider .slideshow li {
+  display: inline;
+}
+
+/* line 27, ../sass/slider.scss */
+.title {
+  text-align: center;
+  /*background-color: #111;*/
+  margin-top: 10px;
+  margin-bottom: 0;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* line 37, ../sass/slider.scss */
+.arrows a {
+  position: absolute;
+  text-decoration: none;
+  cursor: pointer;
+  width: 40px;
+  height: 50px;
+  overflow: hidden;
+  z-index: 10;
+}
+/* line 47, ../sass/slider.scss */
+.arrows a:before {
+  font-family: "flexslider-icon";
+  font-size: 40px;
+  display: inline-block;
+  color: #bbb;
+}
+
+/* line 55, ../sass/slider.scss */
+.prev {
+  bottom: 0;
+}
+/* line 58, ../sass/slider.scss */
+.prev:before {
+  content: '\f001';
+}
+
+/* line 62, ../sass/slider.scss */
+.next {
+  right: 0;
+  bottom: 0;
+}
+/* line 65, ../sass/slider.scss */
+.next:before {
+  content: '\f002';
+}
+
+/* line 70, ../sass/slider.scss */
+.dots {
+  text-align: center;
+  /*background-color: #111;*/
+  padding: 10px;
+}
+/* line 75, ../sass/slider.scss */
+.dots span {
+  cursor: pointer;
+  height: 13px;
+  width: 13px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}

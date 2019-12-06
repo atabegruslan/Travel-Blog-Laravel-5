@@ -1,0 +1,12 @@
+/node_modules
+/public/storage
+/public/hot
+/storage/*.key
+/vendor
+/.idea
+/apk
+/google
+Homestead.json
+Homestead.yaml
+.env
+# travel_blog.sql
