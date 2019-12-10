@@ -17,7 +17,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:api')->resource('/entry', 'EntryApiController');
+//Route::middleware('auth:api')->resource('/entry', 'EntryApiController');//temp deleted
+Route::resource('/entry', 'EntryApiController');
 
 Route::post('/user', 'Auth\UserApiController@store');
 

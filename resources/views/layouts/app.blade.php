@@ -8,7 +8,7 @@
     <title>{{ config('app.name') }}</title>
     <link rel="icon" href="{{ PUB_URL }}favicon.ico">
 
-    <link href="{{ PUB_URL }}css/app.css?v={{ rand() }}" rel="stylesheet">
+    <link href="{{ PUB_URL }}css/travel_blog.css?v={{ rand() }}" rel="stylesheet">
     <link href="{{ PUB_URL }}css/browser_detection.css?v={{ rand() }}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet">
     @if(Route::currentRouteName() == '')

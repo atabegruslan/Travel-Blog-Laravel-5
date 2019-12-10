@@ -733,6 +733,7 @@ $thisAndPrevious = CrudLog::where('time', '<=', $log['time'])
 ## Tutorials
 
 - https://www.youtube.com/watch?v=DJ6PD_jBtU0&feature=share&fbclid=IwAR0-NOMr-b1Eu6v-Ks5c7lnUfnKiwOrCbk2y3ues-1NGrKGLz5B1FTksI6o
+- https://vuejsdevelopers.com/2018/02/05/vue-laravel-crud/
 
 ## Setup
 
@@ -750,10 +751,35 @@ This can be used to see if Vue works ok in the project.
 
 ### Method 1: 
 
-Set up `resources/views/welcome.blade.php` like this:
+1. Set up `resources/views/welcome.blade.php` like this:
 
 ```html
-<head>    
+<body>
+    <div id="app">
+        <example></example>
+    </div>
+    <script src="{{ asset('js/app.js') }}"></script>
+</body>
+```
+
+4. In CLI, launch server: `php artisan serve`, then see: `http://127.0.0.1:8000/welcome`, or turn on local server and see `http://localhost/{sitename}/welcome`
+
+5. Note that `resources/assets/js/app.js` is used.
+
+#### It should look like this:
+
+![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/vuetest1.PNG)
+
+6. Then you will have to do your own css.
+
+### Method 2: 
+
+1. Set up `resources/views/welcome.blade.php` like this:
+
+```html
+<head>   
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script>window.Laravel = { csrfToken: '{{ csrf_token() }}' }</script> 
     <link href="css/app.css" rel="stylesheet">
 </head>
 <body>
@@ -764,32 +790,7 @@ Set up `resources/views/welcome.blade.php` like this:
 </body>
 ```
 
-In CLI, launch server: `php artisan serve`, then see: `http://url.domain/project-name:8000`
-
-Note that `resources/assets/js/app.js` and `resource/assets/sass/app.scss` is used.
-
-### Method 2: 
-
-Set up `resources/views/welcome.blade.php` like this:
-
-```html
-<head>   
-    <script>
-      window.Laravel = <?php echo json_encode([
-          'csrfToken' => csrf_token(),
-      ]); ?>
-    </script> 
-    <link href="public/css/app.css" rel="stylesheet">
-</head>
-<body>
-    <div id="app">
-        <example></example>
-    </div>
-    <script src="public/js/app.js"></script>
-</body>
-```
-
-Set up `package.json` like this:
+2. Have the dev script `package.json` like this:
 
 ```js
 ...
@@ -803,21 +804,15 @@ Set up `package.json` like this:
 ...
 ```
 
-In CLI: run `npm run dev`, which calls `package.json`'s `scripts`'s `dev`, which calls `webpack.mix.js`, which processes `resources/assets/js/app.js` into `public/js/app.js` and `resource/assets/sass/app.scss` into `public/css/app.css`.
+3. In CLI: run `npm run dev`, which calls `package.json`'s `scripts`'s `dev`, which calls `webpack.mix.js`, which processes `resources/assets/js/app.js` into `public/js/app.js` and `resource/assets/sass/app.scss` into `public/css/app.css`.
 
-See `http://url.domain/project-name/public/`
+4. In CLI, launch server: `php artisan serve`, then see: `http://127.0.0.1:8000/welcome`, or turn on local server and see `http://localhost/{sitename}/welcome`
 
-Note that `public/js/app.js` and `public/css/app.css` is used.
+5. Note that `public/js/app.js` and `public/css/app.css` is used.
 
-### It should look like this:
+#### It should look like this:
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/vuetest.PNG)
-
-### Method 3 (this site): 
-
-See `routes/web.php` , `welcome.blade.php` and `app.js`
-
-Access `http://url.domain/project-name/public/vuetest`
+![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/vuetest2.PNG)
 
 ---
 

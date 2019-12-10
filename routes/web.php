@@ -15,7 +15,7 @@ Route::get('/', function(){
 	return view('menu/top_nav/welcome');
 });
 
-Route::get('/vuetest', function () {
+Route::get('/welcome', function () {
     return view('welcome');
 });
 
