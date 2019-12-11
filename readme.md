@@ -134,24 +134,9 @@ config/database.php :
 ],
 ```
 
-## Auth (Web)
-
-Create default database tables for user: `php artisan migrate`
-
-Make route, controller and model for user: `php artisan make:auth`
-
-## Customize flow of app to the following diagram
-
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/flow.PNG)
+## Scaffolding
 
 New Controller for Entry: `php artisan make:controller EntryController --resource`
-
-To ensure that Login must happen before CRUD Entry, add to EntryController:
-```php
-public function __construct(){
-	$this->middleware('auth');
-}
-```
 
 New Entry Model: `php artisan make:model Entry`
 
@@ -160,28 +145,48 @@ routes/web.php :
 Route::resource('/entry', 'EntryController');
 ```
 
-Create: resources/views/entry.blade.php
-
 In EntryController:
 ```php
 public function index(){
-	return view('entry');
+    return view('entry');
 }
 ```
 
-In app/http/controllers/auth/LoginController, RegisterController & ResetPasswordController: `protected $redirectTo = '/entry';`
+Create: resources/views/entry.blade.php
 
+## Auth (Web)
 
-\app\Http\Middleware\RedirectIfAuthenticated.php: 
+Create default database tables for user: `php artisan migrate`
+
+Make route, controller and model for user: `php artisan make:auth`
+
+After this, you can register and login in the browser.
+
+## Customize flow of app
+
+In `app/http/controllers/auth/LoginController`, `RegisterController` & `ResetPasswordController` : change the `protected $redirectTo` routes.
+
+In `app\Http\Middleware\RedirectIfAuthenticated.php` - change the redirect route:
 ```php
 if (Auth::guard($guard)->check()) {
-	return redirect('/');
+    return redirect('/');
 }
 ```
 
-Delete home controller, view and route
+## Ensure login before accessing route
 
-Make new database table like below:
+Either add this to controller
+```php
+public function __construct(){
+	$this->middleware('auth');
+}
+```
+
+Or add this to route
+`Route::middleware('auth')->resource('/entry', 'EntryController')`
+
+
+## Database table
 
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/db.PNG)
 
@@ -762,7 +767,7 @@ This can be used to see if Vue works ok in the project.
 </body>
 ```
 
-4. In CLI, launch server: `php artisan serve`, then see: `http://127.0.0.1:8000/welcome`, or turn on local server and see `http://localhost/{sitename}/welcome`
+4. In CLI, launch server: `php artisan serve`, then see: `http://127.0.0.1:8000/welcome`, or turn on local server and see `http://localhost/{sitename}/public/welcome`
 
 5. Note that `resources/assets/js/app.js` is used.
 
@@ -806,13 +811,19 @@ This can be used to see if Vue works ok in the project.
 
 3. In CLI: run `npm run dev`, which calls `package.json`'s `scripts`'s `dev`, which calls `webpack.mix.js`, which processes `resources/assets/js/app.js` into `public/js/app.js` and `resource/assets/sass/app.scss` into `public/css/app.css`.
 
-4. In CLI, launch server: `php artisan serve`, then see: `http://127.0.0.1:8000/welcome`, or turn on local server and see `http://localhost/{sitename}/welcome`
+4. In CLI, launch server: `php artisan serve`, then see: `http://127.0.0.1:8000/welcome`, or turn on local server and see `http://localhost/{sitename}/public/welcome`
 
 5. Note that `public/js/app.js` and `public/css/app.css` is used.
 
 #### It should look like this:
 
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/vuetest2.PNG)
+
+## The Vue frontend relies on AJAXes to your backend API
+
+But what if your APIs are protected by access token ?
+
+- https://justlaravel.com/vuejs-consumer-app-laravel-api-passport/
 
 ---
 

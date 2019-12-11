@@ -1920,10 +1920,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
         console.log('Blogs mounted.');
+    },
+    created: function created() {
         this.fetchBlogs();
     },
     data: function data() {
@@ -1936,17 +1952,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         };
     },
-    created: function created() {
-        this.fetchBlogs();
-    },
 
     methods: {
         fetchBlogs: function fetchBlogs() {
+            var _this = this;
+
             fetch('api/entry').then(function (res) {
                 return res.json();
             }).then(function (res) {
-                console.dir(res);
+                _this.blogs = res;
             });
+        },
+        updateBlog: function updateBlog(id) {},
+        deleteBlog: function deleteBlog(id) {
+            var _this2 = this;
+
+            if (confirm('Are you sure?')) {
+                fetch('api/entry/${id}', {
+                    method: 'delete'
+                }).then(function (res) {
+                    return res.json();
+                }).then(function (res) {
+                    alert('Blog removed');
+                    _this2.fetchBlogs();
+                });
+            }
+        },
+        createBlog: function createBlog() {
+            var _this3 = this;
+
+            if (this.edit === false) {
+                fetch('api/entry', {
+                    method: 'post',
+                    body: JSON.stringify(this.blog),
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(function (res) {
+                    return res.json();
+                }).then(function (res) {
+                    _this3.blog.place = '';
+                    _this3.blog.comments = '';
+                    alert('Blog created');
+                    _this3.fetchBlogs();
+                });
+            }
         }
     }
 });
@@ -32649,16 +32699,76 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _vm._m(0)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "container"
   }, [_c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-8 col-md-offset-2"
-  }, [_vm._v("\n            Blogs\n        ")])])])
-}]}
+  }, [_c('h2', [_vm._v("Blogs")]), _vm._v(" "), _c('form', {
+    on: {
+      "submit": function($event) {
+        $event.preventDefault();
+        return _vm.createBlog($event)
+      }
+    }
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.blog.place),
+      expression: "blog.place"
+    }],
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.blog.place)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.blog, "place", $event.target.value)
+      }
+    }
+  }), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.blog.comments),
+      expression: "blog.comments"
+    }],
+    domProps: {
+      "value": (_vm.blog.comments)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.$set(_vm.blog, "comments", $event.target.value)
+      }
+    }
+  }), _vm._v(" "), _c('button', {
+    attrs: {
+      "type": "submit"
+    }
+  }, [_vm._v("Create")])]), _vm._v(" "), _vm._l((_vm.blogs), function(blog) {
+    return _c('div', {
+      key: blog.id
+    }, [_c('h3', [_vm._v(_vm._s(blog.place))]), _vm._v(" "), _c('p', [_vm._v(_vm._s(blog.comments))]), _vm._v(" "), _c('button', {
+      on: {
+        "click": function($event) {
+          return _vm.updateBlog(blog.id)
+        }
+      }
+    }, [_vm._v("Update")]), _vm._v(" "), _c('button', {
+      on: {
+        "click": function($event) {
+          return _vm.deleteBlog(blog.id)
+        }
+      }
+    }, [_vm._v("Delete")])])
+  })], 2)])])
+},staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
