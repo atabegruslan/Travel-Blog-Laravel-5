@@ -518,7 +518,8 @@ public function sendResetLinkEmail(Request $request)
     $request1['type'] = 'normal'; // add this line
 
     $response = $this->broker()->sendResetLink(
-        //$request->only('email')
+        //$request->only('email') // Laravel 5.4
+        //$this->credentials($request) // Or Laravel 5.8
         $request1 // add this line
     );
 
@@ -550,7 +551,7 @@ vendor\league\oauth2-server\src\Grant\PasswordGrant.php
 protected function validateUser(ServerRequestInterface $request, ClientEntityInterface $client)
 {
     ...
-    $type = $this->getRequestParameter('type', $request);
+    $type = $this->getRequestParameter('type', $request); // add this
 
     $user = $this->userRepository->getUserEntityByUserCredentials(
         $username,
@@ -611,37 +612,40 @@ resources/views/auth/login.blade.php
 </a> 
 ```
 
-#### Routes
+### Handle Social Sign Ups
 
-routes.web.php
-```php
-Route::group(['middleware' => ['web']], function(){
-	Route::get('auth/{provider}', ['uses' => 'Auth\AuthController@redirectToProvider', 'as' => 'social.login']);
-	Route::get('auth/{provider}/callback', 'Auth\AuthController@handleProviderCallback');
-});
-```
+`php artisan make:controller Web/SocialController`
 
-#### Controllers
-
-App/Http/Controllers/Auth/AuthController.php
+app/Http/Controllers/Web/SocialController.php
 ```php
 public function redirectToProvider($provider)
 {
-	return Socialite::driver($provider)->redirect();
+    return Socialite::driver($provider)->redirect();
 }
+
 public function handleProviderCallback($provider)
 {
-	$user = Socialite::driver($provider)->user();
-	$data = [
-        'name' => $user->getName(),
-        'email' => $user->getEmail(),
-        'type' => $provider,
+    $user = Socialite::driver($provider)->user();
+    $data = [
+        'name'      => $user->getName(),
+        'email'     => $user->getEmail(),
+        'type'      => $provider,
         'social_id' => $user->getId(),
-        'password' => ''
+        'password'  => bcrypt('random') // @todo to be improved later
     ];
+
     Auth::login(User::firstOrCreate($data));
+    
     return Redirect::to('/entry');
 }
+```
+
+routes/web.php
+```php
+Route::group(['namespace' => 'Web', 'middleware' => ['auth']], function () {
+	Route::get('auth/{provider}', ['uses' => 'SocialController@redirectToProvider', 'as' => 'social.login']);
+	Route::get('auth/{provider}/callback', 'SocialController@handleProviderCallback');
+});
 ```
 
 #### User creation by API
