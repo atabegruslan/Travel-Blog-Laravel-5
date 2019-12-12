@@ -391,13 +391,11 @@ Good Tutorials:
 
 ## Social Login (Socialite)
 
-In Facebook Developer Console:
-
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/fb_dev_con_1.PNG)
-
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/fb_dev_con_2.PNG)
+Sign up in Facebook Developer Console.
 
 The same idea applies for Google or any social developers' console.
+
+https://developers.google.com/identity/sign-in/web/sign-in
 
 In .env
 
@@ -440,8 +438,6 @@ In config/app.php
 ```
 
 Add new columns in database's users table for social login
-
-https://developers.google.com/identity/sign-in/web/sign-in
 
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/new_social_db_cols.PNG)
 
@@ -645,22 +641,6 @@ public function handleProviderCallback($provider)
 }
 ```
 
-Tweek for Socialite Plugin Update (Early-Mid 2017) :
-
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/socialite_tweek_1.png)
-
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/socialite_tweek_1.png)
-
-https://stackoverflow.com/questions/43053871/socialite-laravel-5-4-facebook-provider
-
-Useful tutorials:
-
-https://github.com/laravel/socialite
-
-https://www.youtube.com/watch?v=D3oLLz8bFp0
-
-http://devartisans.com/articles/complete-laravel5-socialite-tuorial
-
 
 `php artisan make:controller Api/UserController --resource`
 
@@ -675,6 +655,24 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function () {
 
 });
 ```
+
+Tweek for Socialite Plugin Update (Early-Mid 2017) :
+
+![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/socialite_tweek_1.png)
+
+![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/socialite_tweek_1.png)
+
+https://stackoverflow.com/questions/43053871/socialite-laravel-5-4-facebook-provider
+
+
+### Useful tutorials:
+
+https://github.com/laravel/socialite
+
+https://www.youtube.com/watch?v=D3oLLz8bFp0
+
+http://devartisans.com/articles/complete-laravel5-socialite-tuorial
+
 
 ## Contact form with emailing ability
 
