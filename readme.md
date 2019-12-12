@@ -439,7 +439,9 @@ In config/app.php
 
 Add new columns in database's users table for social login
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/new_social_db_cols.PNG)
+```
+ALTER TABLE `users` ADD `type` VARCHAR(10) NOT NULL DEFAULT 'normal' AFTER `updated_at`, ADD `social_id` VARCHAR(500) NULL DEFAULT NULL AFTER `type`;
+```
 
 Also make the email column not unique (above image). The existing code don't yet allow the same email address to be used for normal and social logins. To allow distinction between same emails of different login methods:
 
@@ -658,9 +660,9 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function () {
 
 Tweek for Socialite Plugin Update (Early-Mid 2017) :
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/socialite_tweek_1.png)
+![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/socialite_tweek_1.PNG)
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/socialite_tweek_1.png)
+![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/socialite_tweek_1.PNG)
 
 https://stackoverflow.com/questions/43053871/socialite-laravel-5-4-facebook-provider
 
