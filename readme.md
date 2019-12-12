@@ -4,7 +4,7 @@
 
 - Tester account: ruslan_aliyev_@hotmail / ruslan
 
-- Note: FB and Google login is outdated.
+- Note: FB, Google and Android integrations are outdated.
 
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/Snapshot.PNG)
 
@@ -578,7 +578,7 @@ interface UserRepositoryInterface extends RepositoryInterface
 
 vendor\laravel\passport\src\Bridge\UserRepository.php
 ```php
-public function getUserEntityByUserCredentials($username, $password, $type, $grantType, ClientEntityInterface $clientEntity)
+public function getUserEntityByUserCredentials($username, $password, $type /* ADD THIS TYPE */, $grantType, ClientEntityInterface $clientEntity)
 {
     ...
     if (method_exists($model, 'findForPassport')) {
@@ -667,6 +667,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function () {
 https://github.com/atabegruslan/Travel-Blog-Laravel-5/blob/master/app/Http/Controllers/Auth/UserApiController.php#L38
 
 #### Tweek for Socialite Plugin Update (Early-Mid 2017) :
+
+This is not a problem in Laravel 5.8
 
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/socialite_tweek_1.PNG)
 
@@ -953,5 +955,5 @@ But what if your APIs are protected by access token ?
 
 ## To Do
 
-- Update Laravel version, FB login, Google login, GCM
+- Update Laravel version, FB login, Google login, GCM : https://github.com/atabegruslan/Travel-Blog-Laravel-5-8
 - vue 
