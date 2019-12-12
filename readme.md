@@ -222,8 +222,6 @@ Route::group(['namespace' => 'Api'], function () {
 });
 ```
 
-Put `echo 'test';` into `Api/EntryController::index` and try visiting `localhost/travel_blog/public//api/entry`
-
 ## Auth (API)
 
 In CLI: `composer require laravel/passport`
@@ -443,6 +441,8 @@ In config/app.php
 
 Add new columns in database's users table for social login
 
+https://developers.google.com/identity/sign-in/web/sign-in
+
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/new_social_db_cols.PNG)
 
 Also make the email column not unique (above image). The existing code don't yet allow the same email address to be used for normal and social logins. To allow distinction between same emails of different login methods:
@@ -660,6 +660,21 @@ https://github.com/laravel/socialite
 https://www.youtube.com/watch?v=D3oLLz8bFp0
 
 http://devartisans.com/articles/complete-laravel5-socialite-tuorial
+
+
+`php artisan make:controller Api/UserController --resource`
+
+routes/api.php
+```php
+// Protected Entry CRUDs
+Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function () {
+
+    Route::resource('/entry', 'EntryController');
+
+    Route::post('/user', 'UserController@store');
+
+});
+```
 
 ## Contact form with emailing ability
 
