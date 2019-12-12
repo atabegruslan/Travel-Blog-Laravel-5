@@ -80,15 +80,6 @@ Return access token
 
 Return user data
 
-- Get post entry: GET `http://ruslan-website.com/laravel/travel_blog/api/entry`
-
-| Header Field Name | Header Field Value |
-| --- | --- |
-| Accept | application/json |
-| Authorization | Bearer (access token) |
-
-Return json entry(s)
-
 - Post new entry: POST `http://ruslan-website.com/laravel/travel_blog/api/entry`
 
 | Header Field Name | Header Field Value |
@@ -198,7 +189,9 @@ composer.json:
 	"laravelcollective/html": "^5.3.0"
 },
 ```
-	
+
+For Latest Laravel (5.8) : version ^5.4.0 of `laravelcollective/html` works.
+
 In CLI: `composer update`
 
 config/app.php:
@@ -218,9 +211,24 @@ Good Tutorials:
 - http://tutsnare.com/upload-files-in-laravel/
 - http://itsolutionstuff.com/post/laravel-5-fileimage-upload-example-with-validationexample.html
 
-## Auth for RESTful API
+## RESTful API
+
+In CLI: `php artisan make:controller Api/EntryController --resource`
+
+routes/api.php: 
+```php
+Route::group(['namespace' => 'Api'], function () {
+    Route::resource('/entry', 'EntryController');
+});
+```
+
+Put `echo 'test';` into `Api/EntryController::index` and try visiting `localhost/travel_blog/public//api/entry`
+
+## Auth (API)
 
 In CLI: `composer require laravel/passport`
+
+For Latest Laravel (5.8), you will need an earlier version of passport, eg: 7.5.1
   
 config/app.php
 ```php
@@ -231,23 +239,24 @@ config/app.php
 
 In CLI: `php artisan migrate`, `php artisan passport:install`
 
-App\User (model):
-```php
-use Laravel\Passport\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
-class User extends Authenticatable{
-    use HasApiTokens, Notifiable;
-}
-```
+Make the `App\User` model use the `Laravel\Passport\HasApiTokens` trait.
 
 App\Providers\AuthServiceProvider:
 ```php
 use Laravel\Passport\Passport;
-public function boot(){
-	$this->registerPolicies();
-	Passport::routes();
+
+class AuthServiceProvider extends ServiceProvider
+{
+    protected $policies = [
+        'App\Model' => 'App\Policies\ModelPolicy',
+    ];
+
+    public function boot()
+    {
+    	$this->registerPolicies();
+
+    	Passport::routes();
+    }
 }
 ```
 
@@ -266,16 +275,108 @@ config/auth.php:
 ],
 ```
 
-Good Tutorial: https://www.sitepoint.com/build-rest-resources-laravel/
+### Now you can get access token: POST `.../oauth/token`
 
-## RESTful API
+| Post Form Data Name | Post Form Data Value |
+| --- | --- |
+| client_id | (from oauth_clients table, password type should be 2) |
+| client_secret | (from oauth_clients table) |
+| grant_type | password |
+| username | (user email) |
+| password | (user password) |
 
-api.php: 
+Return access token
+
+routes/api.php: 
 ```php
-Route::middleware('auth:api')->resource('/entry', 'EntryApiController');
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
 ```
 
-In CLI: `php artisan make:controller EntryApiController --resource`, `php artisan make:model EntryApi`
+### Now you can get user data: GET `.../api/user`
+
+| Header Field Name | Header Field Value |
+| --- | --- |
+| Accept | application/json |
+| Authorization | Bearer (access token) |
+
+Return user data
+
+routes/api.php: 
+```php
+Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function () {
+    Route::resource('/entry', 'EntryController');
+});
+```
+
+### Now you must do Entry CRUDs with access token
+
+#### Get all entries: GET `.../api/entry`
+
+| Header Field Name | Header Field Value |
+| --- | --- |
+| Accept | application/json |
+| Authorization | Bearer (access token) |
+
+Return all entries
+
+#### Get one entry: GET `.../api/entry/{id}`
+
+| Header Field Name | Header Field Value |
+| --- | --- |
+| Accept | application/json |
+| Authorization | Bearer (access token) |
+
+Return one entry
+
+#### Create entry: POST `.../api/entry`
+
+| Header Field Name | Header Field Value |
+| --- | --- |
+| Accept | application/json |
+| Authorization | Bearer (access token) |
+
+| Post Form Data Name | Post Form Data Value |
+| --- | --- |
+| user_id | (user id) |
+| place | (place name) |
+| comments | (comments) |
+| image | (image) |
+
+Return ok or error message
+
+#### Update entry: POST `.../api/entry/{id}`
+
+| Header Field Name | Header Field Value |
+| --- | --- |
+| Accept | application/json |
+| Authorization | Bearer (access token) |
+
+| Post Form Data Name | Post Form Data Value |
+| --- | --- |
+| _method | PUT |
+| user_id | (user id) |
+| place | (place name) |
+| comments | (comments) |
+| image | (image) |
+
+Return ok or error message
+
+#### Delete entry: POST `.../api/entry/{id}`
+
+| Header Field Name | Header Field Value |
+| --- | --- |
+| Accept | application/json |
+| Authorization | Bearer (access token) |
+
+| Post Form Data Name | Post Form Data Value |
+| --- | --- |
+| _method | DELETE |
+
+Return ok or error message
+
+Good Tutorial: https://www.sitepoint.com/build-rest-resources-laravel/
 
 ## Search Box Functionality
 
