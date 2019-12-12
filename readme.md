@@ -391,14 +391,13 @@ Good Tutorials:
 
 ## Social Login (Socialite)
 
-Sign up in Facebook Developer Console.
+### Register
 
-The same idea applies for Google or any social developers' console.
+- Facebook Developer Console: https://developers.facebook.com
+- Google Developer Console: https://console.developers.google.com/
+    - https://developers.google.com/identity/sign-in/web/sign-in
 
-https://developers.google.com/identity/sign-in/web/sign-in
-
-In .env
-
+.env
 ```
 FACEBOOK_CLIENT_ID=
 FACEBOOK_CLIENT_SECRET=
@@ -409,25 +408,25 @@ GOOGLE_CLIENT_SECRET=
 GOOGLE_CALLBACK_URL=
 ```
 
-In config/services.php
-
+config/services.php
 ```php
 'facebook' => [
-    'client_id' => env('FACEBOOK_CLIENT_ID'),
+    'client_id'     => env('FACEBOOK_CLIENT_ID'),
     'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
-    'redirect' => env('FACEBOOK_CALLBACK_URL'),
+    'redirect'      => env('FACEBOOK_CALLBACK_URL'),
 ],
 'google' => [
-    'client_id' => env('GOOGLE_CLIENT_ID'),
+    'client_id'     => env('GOOGLE_CLIENT_ID'),
     'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-    'redirect' => env('GOOGLE_CALLBACK_URL'),
+    'redirect'      => env('GOOGLE_CALLBACK_URL'),
 ],
 ```
 
-In CLI : `composer require laravel/socialite`
+### Install Socialite
 
-In config/app.php
+`composer require laravel/socialite`
 
+config/app.php
 ```php
 'providers' => [
 	Laravel\Socialite\SocialiteServiceProvider::class,
@@ -437,32 +436,37 @@ In config/app.php
 ],
 ```
 
-Add new columns in database's users table for social login
+### Modifications
 
+```sql
+ALTER TABLE `users` 
+    ADD `type` VARCHAR(10) NOT NULL DEFAULT 'normal' AFTER `updated_at`, 
+    ADD `social_id` VARCHAR(500) NULL DEFAULT NULL AFTER `type`;
 ```
-ALTER TABLE `users` ADD `type` VARCHAR(10) NOT NULL DEFAULT 'normal' AFTER `updated_at`, ADD `social_id` VARCHAR(500) NULL DEFAULT NULL AFTER `type`;
-```
 
-Also make the email column not unique (above image). The existing code don't yet allow the same email address to be used for normal and social logins. To allow distinction between same emails of different login methods:
+Also make `users`.`email` not unique. 
 
-For Login:
+The existing code don't yet allow the same email address to be used for normal and social logins. 
 
-In vendor\laravel\framework\src\Illuminate\Foundation\Auth\AuthenticatesUsers.php 
+To allow distinction between same emails of different login methods:
 
+#### For Login:
+
+vendor\laravel\framework\src\Illuminate\Foundation\Auth\AuthenticatesUsers.php 
 ```php
 protected function credentials(Request $request)
 {
     //return $request->only($this->username(), 'password');
     $request = $request->only($this->username(), 'password');
     $request['type'] = 'normal';
+
     return $request;
 }
 ```
 
-For Register:
+#### For Register:
 
-In vendor\laravel\framework\src\Illuminate\Foundation\Auth\RegistersUsers.php 
-
+vendor\laravel\framework\src\Illuminate\Foundation\Auth\RegistersUsers.php 
 ```php
 public function register(Request $request)
 {
@@ -470,8 +474,21 @@ public function register(Request $request)
     $this->validator($request->all())->validate();
 ```
 
-In app\Http\Controllers\Auth\RegisterController.php
+##### Install `unique_with`
 
+`unique_with` is used to allow composite key validation. ( https://github.com/felixkiss/uniquewith-validator )
+
+`composer require felixkiss/uniquewith-validator`
+
+config/app.php
+```php
+'providers' => [
+    ...
+    Felixkiss\UniqueWithValidator\ServiceProvider::class,
+],
+```
+
+app\Http\Controllers\Auth\RegisterController.php
 ```php
 protected function validator(array $data)
 {
@@ -481,33 +498,17 @@ protected function validator(array $data)
     //     'password' => 'required|min:6|confirmed',
     // ]);
     return Validator::make($data, [
-        'name' => 'required|max:255',
-        'email' => 'required|email|max:255|unique_with:users,type',
+        'name'     => 'required|max:255',
+        'email'    => 'required|email|max:255|unique_with:users,type',
         'password' => 'required|min:6|confirmed',
-        'type' => 'required',
+        'type'     => 'required',
     ]);
 }
 ```
 
-Notice that `unique_with` is used to allow composite key validation. 
+#### For Forget Passwords:
 
-In CLI: `composer require felixkiss/uniquewith-validator`
-
-In config/app.php
-
-```php
-'providers' => [
-    ...
-    Felixkiss\UniqueWithValidator\ServiceProvider::class,
-],
-```
-
-More info about `unique_with` : https://github.com/felixkiss/uniquewith-validator
-
-For Forget Passwords:
-
-In vendor\laravel\framework\src\Illuminate\Foundation\Auth\SendsPasswordResetEmails.php
-
+vendor\laravel\framework\src\Illuminate\Foundation\Auth\SendsPasswordResetEmails.php
 ```php
 public function sendResetLinkEmail(Request $request)
 {
@@ -527,8 +528,7 @@ public function sendResetLinkEmail(Request $request)
 }
 ```
 
-In vendor\laravel\framework\src\Illuminate\Foundation\Auth\ResetsPasswords.php
-
+vendor\laravel\framework\src\Illuminate\Foundation\Auth\ResetsPasswords.php
 ```php
 protected function credentials(Request $request)
 {
@@ -543,10 +543,9 @@ protected function credentials(Request $request)
 }
 ```
 
-For API Login:
+#### For API Login:
 
-In vendor\league\oauth2-server\src\Grant\PasswordGrant.php
-
+vendor\league\oauth2-server\src\Grant\PasswordGrant.php
 ```php
 protected function validateUser(ServerRequestInterface $request, ClientEntityInterface $client)
 {
@@ -562,8 +561,7 @@ protected function validateUser(ServerRequestInterface $request, ClientEntityInt
     );
 ```
 
-In vendor\league\oauth2-server\src\Repositories\UserRepositoryInterface.php
-
+vendor\league\oauth2-server\src\Repositories\UserRepositoryInterface.php
 ```php
 interface UserRepositoryInterface extends RepositoryInterface
 {
@@ -577,8 +575,7 @@ interface UserRepositoryInterface extends RepositoryInterface
 }
 ```
 
-In vendor\laravel\passport\src\Bridge\UserRepository.php
-
+vendor\laravel\passport\src\Bridge\UserRepository.php
 ```php
 public function getUserEntityByUserCredentials($username, $password, $type, $grantType, ClientEntityInterface $clientEntity)
 {
@@ -591,8 +588,9 @@ public function getUserEntityByUserCredentials($username, $password, $type, $gra
     }
 ```
 
-Modify the app/User.php model too
+#### Models
 
+App\User.php
 ```php
 class User extends Authenticatable{
 ...
@@ -601,8 +599,9 @@ class User extends Authenticatable{
     ];
 ```
 
-Add Facebook button to resources/views/auth/login.blade.php
+#### Social buttons
 
+resources/views/auth/login.blade.php
 ```html
 <a href="{{ route('social.login', ['facebook']) }}">
     <img src="btn_facebook.png">
@@ -612,8 +611,9 @@ Add Facebook button to resources/views/auth/login.blade.php
 </a> 
 ```
 
-In routes.web.php
+#### Routes
 
+routes.web.php
 ```php
 Route::group(['middleware' => ['web']], function(){
 	Route::get('auth/{provider}', ['uses' => 'Auth\AuthController@redirectToProvider', 'as' => 'social.login']);
@@ -621,8 +621,9 @@ Route::group(['middleware' => ['web']], function(){
 });
 ```
 
-In App/Http/Controllers/Auth/AuthController.php
+#### Controllers
 
+App/Http/Controllers/Auth/AuthController.php
 ```php
 public function redirectToProvider($provider)
 {
@@ -643,6 +644,7 @@ public function handleProviderCallback($provider)
 }
 ```
 
+#### User creation by API
 
 `php artisan make:controller Api/UserController --resource`
 
@@ -658,11 +660,13 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function () {
 });
 ```
 
-Tweek for Socialite Plugin Update (Early-Mid 2017) :
+https://github.com/atabegruslan/Travel-Blog-Laravel-5/blob/master/app/Http/Controllers/Auth/UserApiController.php#L38
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/socialite_tweek_1.PNG)
+#### Tweek for Socialite Plugin Update (Early-Mid 2017) :
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/socialite_tweek_1.PNG)
+![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/socialite_tweek_1.PNG)
+
+![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/socialite_tweek_2.PNG)
 
 https://stackoverflow.com/questions/43053871/socialite-laravel-5-4-facebook-provider
 
@@ -681,12 +685,12 @@ http://devartisans.com/articles/complete-laravel5-socialite-tuorial
 In .env
 
 ```
-MAIL_DRIVER=sendmail
+MAIL_DRIVER=smtp
 MAIL_HOST=smtp.gmail.com
-MAIL_PORT=465
+MAIL_PORT=587
 MAIL_USERNAME=***@gmail.com
-MAIL_PASSWORD=***
-MAIL_ENCRYPTION=ssl
+MAIL_PASSWORD=*****
+MAIL_ENCRYPTION=tls
 ```
 
 Create contact form view, connect it to route then to controller.
