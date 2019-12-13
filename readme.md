@@ -293,7 +293,6 @@ Good Tutorials:
 - http://itsolutionstuff.com/post/laravel-5-fileimage-upload-example-with-validationexample.html
 - Extra fun with images - crop to circle with transparency: 
     - https://thedebuggers.com/transparent-circular-crop-using-php-gd/
-    - https://github.com/atabegruslan/Travel-Blog-Laravel-5/blob/master/app/Http/Controllers/Web/EntryController.php `::makeCircle`
 
 ## RESTful API
 
