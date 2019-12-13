@@ -14,7 +14,7 @@
 
         <link href="css/app.css" rel="stylesheet">
 
-        <title>Laravel</title>
+        <title>Vue Demo</title>
 
     </head>
     <body>

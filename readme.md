@@ -1,10 +1,10 @@
 # Laravel 5.4 CRUD API Android
 
-- Website http://ruslan-website.com/laravel/travel_blog/
+- Website http://ruslan-website.com/laravel/travel_blog/ <sup>removed</sup>
 
 - Tester account: ruslan_aliyev_@hotmail / ruslan
 
-- Note: FB, Google and Android integrations are outdated.
+- Note: FB, Google and Android integrations are outdated. 
 
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/Snapshot.PNG)
 
@@ -24,15 +24,11 @@
 
 - HTML5 Notification, GCM
 
-## Database 
-
-phpmyadmin, import `travel_blog.sql`
-
 ## Download all app images
 
-`./download_all_travel_blog_images.sh`
+`./download_all_travel_blog_images.sh` 
 
-## Android App
+## Android App <sup>outdated</sup>
 
 Download here: http://ruslan-website.com/laravel/travel_blog/apk/TravelBlog.apk
 
@@ -40,25 +36,13 @@ Source code: https://github.com/atabegruslan/Travel-Blog-Android
 
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/Screenshot.png)
 
-## API
+# API
 
-For Register: Insert new user, get access token, get user data.
+## Users
 
-For Social signins: Get social ID via 3rd party signin, insert new user, get access token, get user data.
+### Get access token
 
-For Login: Get access token, get user data. 
-
-- Insert new user: POST `http://ruslan-website.com/laravel/travel_blog/api/user`
-
-| Post Form Data Name | Post Form Data Value |
-| --- | --- |
-| name | Name |
-| email | name@email.com |
-| password | abcdef |
-| type | 'normal' or 'facebook' or 'google' |
-| social_id | (optional) |
-
-- Get access token: POST `http://ruslan-website.com/laravel/travel_blog/oauth/token`
+POST `http://ruslan-website.com/laravel/travel_blog/oauth/token`
 
 | Post Form Data Name | Post Form Data Value |
 | --- | --- |
@@ -71,7 +55,9 @@ For Login: Get access token, get user data.
 
 Return access token
 
-- Get user data: GET `http://ruslan-website.com/laravel/travel_blog/api/user`
+### Get user data
+
+GET `http://ruslan-website.com/laravel/travel_blog/api/user`
 
 | Header Field Name | Header Field Value |
 | --- | --- |
@@ -80,7 +66,9 @@ Return access token
 
 Return user data
 
-- Post new entry: POST `http://ruslan-website.com/laravel/travel_blog/api/entry`
+### Insert new user
+
+POST `http://ruslan-website.com/laravel/travel_blog/api/user`
 
 | Header Field Name | Header Field Value |
 | --- | --- |
@@ -89,12 +77,89 @@ Return user data
 
 | Post Form Data Name | Post Form Data Value |
 | --- | --- |
-| user_id | (user id) |
-| place | (place name) |
-| comments | (comments) |
-| image | (image) |
+| name | Name |
+| email | name@email.com |
+| password | abcdef |
+| type | 'normal' or 'facebook' or 'google' |
+| social_id | (optional) |
 
-Return ok or error message
+Return OK or Error response
+
+## Entries
+
+### Get all entries
+
+GET `http://ruslan-website.com/laravel/travel_blog/api/entry`
+
+| Header Field Name | Header Field Value |
+| --- | --- |
+| Accept | application/json |
+| Authorization | Bearer (access token) |
+
+Return all entries
+
+### Get one entry
+
+GET `http://ruslan-website.com/laravel/travel_blog/api/entry/{id}`
+
+| Header Field Name | Header Field Value |
+| --- | --- |
+| Accept | application/json |
+| Authorization | Bearer (access token) |
+
+Return one entry
+
+### Create entry
+
+POST `http://ruslan-website.com/laravel/travel_blog/api/entry`
+
+| Header Field Name | Header Field Value |
+| --- | --- |
+| Accept | application/json |
+| Authorization | Bearer (access token) |
+
+| Post Form Data Name | Post Form Data Value |
+| --- | --- |
+| user_id | (user id, int) |
+| place | (place name, string) |
+| comments | (comments, string) |
+| image | (image, file, optional) |
+
+Return OK or Error response
+
+### Update entry
+
+POST `http://ruslan-website.com/laravel/travel_blog/api/entry/{id}`
+
+| Header Field Name | Header Field Value |
+| --- | --- |
+| Accept | application/json |
+| Authorization | Bearer (access token) |
+
+| Post Form Data Name | Post Form Data Value |
+| --- | --- |
+| _method | PUT |
+| user_id | (user id, int, optional) |
+| place | (place name, string, optional) |
+| comments | (comments, string, optional) |
+| image | (image, file, optional) |
+
+Return OK or Error response
+
+### Delete entry
+
+POST `http://ruslan-website.com/laravel/travel_blog/api/entry/{id}`
+
+| Header Field Name | Header Field Value |
+| --- | --- |
+| Accept | application/json |
+| Authorization | Bearer (access token) |
+
+| Post Form Data Name | Post Form Data Value |
+| --- | --- |
+| _method | DELETE |
+
+Return OK or Error response
 
 # How to make this app
 
@@ -118,32 +183,50 @@ DB_PASSWORD=***
 config/database.php : 
 ```
 'mysql' => [
-	...
-	'charset' => 'utf8',
-	'collation' => 'utf8_unicode_ci',
-	...
+    ...
+    'charset' => 'utf8',
+    'collation' => 'utf8_unicode_ci',
+    ...
 ],
 ```
 
 ## Scaffolding
 
-New Controller for Entry: `php artisan make:controller EntryController --resource`
+1. New Controller for Entry: `php artisan make:controller EntryController --resource`
 
-New Entry Model: `php artisan make:model Entry`
+2. New Entry Model: `php artisan make:model Entry`
 
-routes/web.php :
+3. routes/web.php :
 ```php
 Route::resource('/entry', 'EntryController');
 ```
 
-In EntryController:
+4. In EntryController:
 ```php
 public function index(){
     return view('entry');
 }
 ```
 
-Create: resources/views/entry.blade.php
+5. Create: resources/views/entry.blade.php
+
+### Model Relationships
+
+- 1 - many or many - 1
+    - `->belongsTo` 
+- Many to many
+    - Pivot tables: https://laraveldaily.com/pivot-tables-and-many-to-many-relationships/
+
+### Create Controller Inside a Subfolder
+
+1. `php artisan make:controller Web/EntryController --resource` ( https://laracasts.com/discuss/channels/laravel/create-controller-inside-a-subfolder?page=1 )
+
+2. routes/web.php :
+```php
+Route::group(['namespace' => 'Web'], function () {
+    Route::resource('/entry', 'EntryController');
+});
+```
 
 ## Auth (Web)
 
@@ -169,7 +252,7 @@ if (Auth::guard($guard)->check()) {
 Either add this to controller
 ```php
 public function __construct(){
-	$this->middleware('auth');
+    $this->middleware('auth');
 }
 ```
 
@@ -186,22 +269,20 @@ Or add this to route
 composer.json:
 ```js
 "require": {
-	"laravelcollective/html": "^5.3.0"
+    "laravelcollective/html": "^5.3.0"
 },
 ```
-
-For Latest Laravel (5.8) : version ^5.4.0 of `laravelcollective/html` works.
 
 In CLI: `composer update`
 
 config/app.php:
 ```php
 'providers' => [
-	Collective\Html\HtmlServiceProvider::class,
+    Collective\Html\HtmlServiceProvider::class,
 ],
 'aliases' => [
-	'Form' => Collective\Html\FormFacade::class,
-	'Html' => Collective\Html\HtmlFacade::class,
+    'Form' => Collective\Html\FormFacade::class,
+    'Html' => Collective\Html\HtmlFacade::class,
 ],
 ```
 
@@ -210,28 +291,27 @@ Good Tutorials:
 - https://laracasts.com/discuss/channels/general-discussion/errorexception-in-urlgeneratorphp-line-273)
 - http://tutsnare.com/upload-files-in-laravel/
 - http://itsolutionstuff.com/post/laravel-5-fileimage-upload-example-with-validationexample.html
+- Extra fun with images - crop to circle with transparency: 
+    - https://thedebuggers.com/transparent-circular-crop-using-php-gd/
+    - https://github.com/atabegruslan/Travel-Blog-Laravel-5/blob/master/app/Http/Controllers/Web/EntryController.php `::makeCircle`
 
 ## RESTful API
 
-In CLI: `php artisan make:controller Api/EntryController --resource`
+In CLI: `php artisan make:controller EntryApiController --resource`
 
 routes/api.php: 
 ```php
-Route::group(['namespace' => 'Api'], function () {
-    Route::resource('/entry', 'EntryController');
-});
+Route::resource('/entry', 'EntryApiController');
 ```
 
 ## Auth (API)
 
 In CLI: `composer require laravel/passport`
 
-For Latest Laravel (5.8), you will need an earlier version of passport, eg: 7.5.1
-  
 config/app.php
 ```php
 'providers' => [
-	Laravel\Passport\PassportServiceProvider::class,
+    Laravel\Passport\PassportServiceProvider::class,
 ],
 ```
 
@@ -251,9 +331,9 @@ class AuthServiceProvider extends ServiceProvider
 
     public function boot()
     {
-    	$this->registerPolicies();
+        $this->registerPolicies();
 
-    	Passport::routes();
+        Passport::routes();
     }
 }
 ```
@@ -273,17 +353,7 @@ config/auth.php:
 ],
 ```
 
-### Now you can get access token: POST `.../oauth/token`
-
-| Post Form Data Name | Post Form Data Value |
-| --- | --- |
-| client_id | (from oauth_clients table, password type should be 2) |
-| client_secret | (from oauth_clients table) |
-| grant_type | password |
-| username | (user email) |
-| password | (user password) |
-
-Return access token
+Now you can get access token: POST `.../oauth/token`
 
 routes/api.php: 
 ```php
@@ -292,87 +362,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 ```
 
-### Now you can get user data: GET `.../api/user`
-
-| Header Field Name | Header Field Value |
-| --- | --- |
-| Accept | application/json |
-| Authorization | Bearer (access token) |
-
-Return user data
+Now you can get user data: GET `.../api/user`
 
 routes/api.php: 
 ```php
-Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function () {
-    Route::resource('/entry', 'EntryController');
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::resource('/entry', 'EntryApiController');
 });
 ```
 
-### Now you must do Entry CRUDs with access token
-
-#### Get all entries: GET `.../api/entry`
-
-| Header Field Name | Header Field Value |
-| --- | --- |
-| Accept | application/json |
-| Authorization | Bearer (access token) |
-
-Return all entries
-
-#### Get one entry: GET `.../api/entry/{id}`
-
-| Header Field Name | Header Field Value |
-| --- | --- |
-| Accept | application/json |
-| Authorization | Bearer (access token) |
-
-Return one entry
-
-#### Create entry: POST `.../api/entry`
-
-| Header Field Name | Header Field Value |
-| --- | --- |
-| Accept | application/json |
-| Authorization | Bearer (access token) |
-
-| Post Form Data Name | Post Form Data Value |
-| --- | --- |
-| user_id | (user id) |
-| place | (place name) |
-| comments | (comments) |
-| image | (image) |
-
-Return ok or error message
-
-#### Update entry: POST `.../api/entry/{id}`
-
-| Header Field Name | Header Field Value |
-| --- | --- |
-| Accept | application/json |
-| Authorization | Bearer (access token) |
-
-| Post Form Data Name | Post Form Data Value |
-| --- | --- |
-| _method | PUT |
-| user_id | (user id) |
-| place | (place name) |
-| comments | (comments) |
-| image | (image) |
-
-Return ok or error message
-
-#### Delete entry: POST `.../api/entry/{id}`
-
-| Header Field Name | Header Field Value |
-| --- | --- |
-| Accept | application/json |
-| Authorization | Bearer (access token) |
-
-| Post Form Data Name | Post Form Data Value |
-| --- | --- |
-| _method | DELETE |
-
-Return ok or error message
+Now you must do Entry CRUDs with access token
 
 Good Tutorial: https://www.sitepoint.com/build-rest-resources-laravel/
 
@@ -393,9 +392,15 @@ Good Tutorials:
 
 ### Register
 
-- Facebook Developer Console: https://developers.facebook.com
-- Google Developer Console: https://console.developers.google.com/
-    - https://developers.google.com/identity/sign-in/web/sign-in
+#### Facebook Developer Console
+
+https://developers.facebook.com
+
+#### Google Developer Console
+
+https://console.developers.google.com/
+
+https://developers.google.com/identity/sign-in/web/sign-in
 
 .env
 ```
@@ -429,10 +434,10 @@ config/services.php
 config/app.php
 ```php
 'providers' => [
-	Laravel\Socialite\SocialiteServiceProvider::class,
+    Laravel\Socialite\SocialiteServiceProvider::class,
 ],
 'aliases' => [
-	'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+    'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 ],
 ```
 
@@ -518,8 +523,7 @@ public function sendResetLinkEmail(Request $request)
     $request1['type'] = 'normal'; // add this line
 
     $response = $this->broker()->sendResetLink(
-        //$request->only('email') // Laravel 5.4
-        //$this->credentials($request) // Or Laravel 5.8
+        //$request->only('email')
         $request1 // add this line
     );
 
@@ -614,9 +618,9 @@ resources/views/auth/login.blade.php
 
 ### Handle Social Sign Ups
 
-`php artisan make:controller Web/SocialController`
+`php artisan make:controller Auth/AuthController`
 
-app/Http/Controllers/Web/SocialController.php
+app/Http/Controllers/Auth/AuthController.php
 ```php
 public function redirectToProvider($provider)
 {
@@ -642,33 +646,31 @@ public function handleProviderCallback($provider)
 
 routes/web.php
 ```php
-Route::group(['namespace' => 'Web', 'middleware' => ['auth']], function () {
-	Route::get('auth/{provider}', ['uses' => 'SocialController@redirectToProvider', 'as' => 'social.login']);
-	Route::get('auth/{provider}/callback', 'SocialController@handleProviderCallback');
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('auth/{provider}', ['uses' => 'Auth\AuthController@redirectToProvider', 'as' => 'social.login']);
+    Route::get('auth/{provider}/callback', 'Auth\AuthController@handleProviderCallback');
 });
 ```
 
-#### User creation by API
+### User creation by API
 
-`php artisan make:controller Api/UserController --resource`
+`php artisan make:controller Auth/UserApiController --resource`
 
 routes/api.php
 ```php
 // Protected Entry CRUDs
-Route::group(['namespace' => 'Api', 'middleware' => ['auth:api']], function () {
+Route::group(['middleware' => ['auth:api']], function () {
 
-    Route::resource('/entry', 'EntryController');
+    Route::resource('/entry', 'EntryApiController');
 
-    Route::post('/user', 'UserController@store');
+    Route::post('/user', 'Auth\UserApiController@store');
 
 });
 ```
 
-https://github.com/atabegruslan/Travel-Blog-Laravel-5/blob/master/app/Http/Controllers/Auth/UserApiController.php#L38
+Then complete the store method, like in: https://github.com/atabegruslan/Travel-Blog-Laravel-5/blob/master/app/Http/Controllers/Auth/UserApiController.php
 
-#### Tweek for Socialite Plugin Update (Early-Mid 2017) :
-
-This is not a problem in Laravel 5.8
+### Tweek for Socialite Plugin Update (Early-Mid 2017) :
 
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/socialite_tweek_1.PNG)
 
@@ -679,17 +681,14 @@ https://stackoverflow.com/questions/43053871/socialite-laravel-5-4-facebook-prov
 
 ### Useful tutorials:
 
-https://github.com/laravel/socialite
-
-https://www.youtube.com/watch?v=D3oLLz8bFp0
-
-http://devartisans.com/articles/complete-laravel5-socialite-tuorial
+- https://github.com/laravel/socialite
+- https://www.youtube.com/watch?v=D3oLLz8bFp0
+- http://devartisans.com/articles/complete-laravel5-socialite-tuorial
 
 
 ## Contact form with emailing ability
 
-In .env
-
+.env
 ```
 MAIL_DRIVER=smtp
 MAIL_HOST=smtp.gmail.com
@@ -701,56 +700,9 @@ MAIL_ENCRYPTION=tls
 
 Create contact form view, connect it to route then to controller.
 
-In controller:
-
-```php
-use Mail;
-
-class EmailController extends Controller
-{
-    public function send(Request $request)
-    {
-        $this->validate($request, [
-            'name' => 'required|max:40',
-            'email' => 'required|email|max:40',
-            'subject' => 'required|max:40',
-            'body' => 'required|max:200'
-        ]); 
-
-        $data = array(
-            'name' => $request->name,
-            'email' => $request->email,
-            'subject' => $request->subject,
-            'body' => $request->body
-        );
-
-        Mail::send(
-            'email.admin',
-            $data, 
-            function($message) use ($data) {
-                $message->from( $data['email'] );
-                $message->to('ruslan_aliyev_@hotmail.com')->subject( $data['body'] );
-            }
-        );
-
-        Mail::send(
-            'email.enquirer',
-            $data, 
-            function($message) use ($data) {
-                $message->from('ruslan_aliyev_@hotmail.com');
-                $message->to( $data['email'] )->subject( $data['body'] );
-            }
-        );
-
-        \Session::flash('success', 'Email Sent');
-
-        return Redirect::to('/contact');
-    }
-}
-```
+Write the controller like this: https://github.com/atabegruslan/Travel-Blog-Laravel-5/blob/master/app/Http/Controllers/EmailController.php
 
 In view, for HTML email template. Here I just show the HTML email that Admin receives:
-
 ```html
 <p style="font-size: 100%;">Dear Administrator, You got new mail from Travel Blog</p>
 
@@ -789,7 +741,7 @@ $slider1.slider
 ## Events (Hooks)
 
 - https://www.youtube.com/watch?v=e40_eal2DmM
-- https://laravel.com/docs/5.8/events#dispatching-events
+- https://laravel.com/docs/5.4/events#dispatching-events
 - `php artisan event:generate`
 
 ## Service Provider
@@ -800,55 +752,11 @@ $slider1.slider
 
 - https://code.tutsplus.com/tutorials/how-to-register-use-laravel-service-providers--cms-28966
 - Then watch these tutorials:
- - https://www.youtube.com/watch?v=urycXvTEnF8&t=1m
- - https://www.youtube.com/watch?v=GqVdt6OWN-Y&list=PL_HVsP_TO8z7aeylCMe64BIx3VEfvPdn&index=34
+    - https://www.youtube.com/watch?v=urycXvTEnF8&t=1m
+    - https://www.youtube.com/watch?v=GqVdt6OWN-Y&list=PL_HVsP_TO8z7aeylCMe64BIx3VEfvPdn&index=34
 - Then watch these tutorials:
- - https://www.youtube.com/watch?v=pIWDFVWQXMQ&list=PL_HVsP_TO8z7aey-lCMe64BIx3VEfvPdn&index=33&t=19m35s
- - https://www.youtube.com/watch?v=hy0oieokjtQ&list=PL_HVsP_TO8z7aey-lCMe64BIx3VEfvPdn&index=35
-
-## Different ways of writting things
-
-In Blade
-```
-@if (!in_array($modLabel, ['xxx', 'yyy']))
-
-@endif
-```
-is same as
-```
-@php {{ $skips = ['xxx','yyy','deleted_at']; }} @endphp
-@if (!in_array($initLabel, $skips))
-
-@endif
-```
-
-In PHP
-```
-$thisAndPrevious = ActionLog::where([
-        [ 'time',            '<=', $log['time']            ],
-        [ 'record_key_name', '=',  $log['record_key_name'] ],
-        [ 'record_id',       '=',  $log['record_id']       ],
-        [ 'model',           '=',  $log['model']           ],
-    ])
-    ->where(function ($query) {
-        $query->where('method', '=', 'create')
-              ->orWhere('method', '=', 'update');
-    })
-    ->orderBy('id', 'DESC')
-    ->take(2)
-    ->get();
-```
-is same as
-```
-$thisAndPrevious = CrudLog::where('time', '<=', $log['time'])
-    ->where('record_key_name', '=',  $log['record_key_name'])
-    ->where('record_id', '=',  $log['record_id'])
-    ->where('model', '=',  $log['model'])
-    ->whereIn('method', ['create', 'update'])
-    ->orderBy('id', 'DESC')
-    ->take(2)
-    ->get();
-```
+    - https://www.youtube.com/watch?v=pIWDFVWQXMQ&list=PL_HVsP_TO8z7aey-lCMe64BIx3VEfvPdn&index=33&t=19m35s
+    - https://www.youtube.com/watch?v=hy0oieokjtQ&list=PL_HVsP_TO8z7aey-lCMe64BIx3VEfvPdn&index=35
 
 ## Upload to server
 
@@ -880,7 +788,7 @@ Install Bootstrap. In CLI: `npm install bootstrap`
 
 This can be used to see if Vue works ok in the project.
 
-### Method 1: 
+### Method 1 : 
 
 1. Set up `resources/views/welcome.blade.php` like this:
 
@@ -903,7 +811,7 @@ This can be used to see if Vue works ok in the project.
 
 6. Then you will have to do your own css.
 
-### Method 2: 
+### Method 2 : 
 
 1. Set up `resources/views/welcome.blade.php` like this:
 
@@ -947,13 +855,27 @@ This can be used to see if Vue works ok in the project.
 
 ## The Vue frontend relies on AJAXes to your backend API
 
-But what if your APIs are protected by access token ?
+AJAX here is done by
 
-- https://justlaravel.com/vuejs-consumer-app-laravel-api-passport/
+- JS's Fetch API
+- Axios library
+
+- https://stackoverflow.com/questions/40844297/what-is-difference-between-axios-and-fetch
+- https://www.sitepoint.com/introduction-to-the-fetch-api/
+- https://www.youtube.com/playlist?list=PLyuRouwmQCjkWu63mHksI9EA4fN-vwGs7
+
+
+## Notes
+
+- `fsevents` warnings when running `npm install`? Never mind it, it's not needed on Windows. https://stackoverflow.com/questions/40226745/npm-warn-notsup-skipping-optional-dependency-unsupported-platform-for-fsevents
+- what if your APIs are protected by access token ? 
+    - https://justlaravel.com/vuejs-consumer-app-laravel-api-passport/
+    - https://gomakethings.com/using-oauth-with-fetch-in-vanilla-js/
+    - https://learn.co/lessons/javascript-fetch
 
 ---
 
 ## To Do
 
 - Update Laravel version, FB login, Google login, GCM : https://github.com/atabegruslan/Travel-Blog-Laravel-5-8
-- vue 
+- vue

@@ -4,6 +4,8 @@
 
 <h1 class="row" >Welcome {{ Auth::user()->name }}</h1>
 
+<p>This is a compact table view with CRUD capibilities. This template is not being called by any controllers nor can be displayed. The code here is just for reference.</p>
+
 <div class='row'>
     <div id='search'>
         {!! Form::open(array('method'=>'GET','url' => 'search','class'=>'form-inline')) !!}

@@ -21,7 +21,7 @@ Route::get('/welcome', function () {
 
 Auth::routes();
 
-Route::group(['middleware' => ['web']], function(){
+Route::group(['middleware' => ['auth']], function() {
 
 	Route::resource('/entry', 'EntryController');
 	Route::get('/search', 'SearchController@index');
@@ -37,6 +37,5 @@ Route::group(['middleware' => ['web']], function(){
 	Route::get('/log', 'LogController@index');
 	Route::post('/log/restore', 'LogController@restore');
 });
-
 
 Route::get('/notification', 'NotificationController@index');
