@@ -1,7 +1,5 @@
 # Laravel 5.4 CRUD API Android
 
-- Website http://ruslan-website.com/laravel/travel_blog/ <sup>removed</sup>
-
 - Tester account: ruslan_aliyev_@hotmail / ruslan
 
 - Note: FB, Google and Android integrations are outdated. 
@@ -30,9 +28,7 @@
 
 ## Android App <sup>outdated</sup>
 
-Download here: http://ruslan-website.com/laravel/travel_blog/apk/TravelBlog.apk
-
-Source code: https://github.com/atabegruslan/Travel-Blog-Android
+Source code: 
 
 ![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Android/master/Screenshot.png)
 
@@ -876,5 +872,5 @@ AJAX here is done by
 
 ## To Do
 
-- Update Laravel version, FB login, Google login, GCM : https://github.com/atabegruslan/Travel-Blog-Laravel-5-8
+- Update Laravel version, FB login, Google login, GCM.
 - vue
