@@ -1,4 +1,4 @@
-# Laravel 5.4 CRUD API Android
+# Laravel 5.4 App
 
 - Tester account: ruslan_aliyev_@hotmail / ruslan
 
