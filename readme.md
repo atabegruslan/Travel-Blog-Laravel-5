@@ -1,10 +1,10 @@
 # Laravel 5.4 App
 
 - Tester account: ruslan_aliyev_@hotmail / ruslan
-
+- Android App: https://github.com/Ruslan-Aliyev/Travel-Blog-Android
 - Note: FB, Google and Android integrations are outdated. 
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/Snapshot.PNG)
+![](https://raw.githubusercontent.com/Ruslan-Aliyev/Travel-Blog-Laravel-5-4/master/Illustrations/Snapshot.PNG)
 
 ## Features
 
@@ -258,7 +258,7 @@ Or add this to route
 
 ## Database table
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/db.PNG)
+![](https://raw.githubusercontent.com/Ruslan-Aliyev/Travel-Blog-Laravel-5-4/master/Illustrations/db.PNG)
 
 ## Text and Image MultiPart Upload Form
 
@@ -663,13 +663,13 @@ Route::group(['middleware' => ['auth:api']], function () {
 });
 ```
 
-Then complete the store method, like in: https://github.com/atabegruslan/Travel-Blog-Laravel-5/blob/master/app/Http/Controllers/Auth/UserApiController.php
+Then complete the store method, like in: https://github.com/Ruslan-Aliyev/Travel-Blog-Laravel-5-4/blob/master/app/Http/Controllers/Auth/UserApiController.php
 
 ### Tweek for Socialite Plugin Update (Early-Mid 2017) :
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/socialite_tweek_1.PNG)
+![](https://raw.githubusercontent.com/Ruslan-Aliyev/Travel-Blog-Laravel-5-4/master/Illustrations/socialite_tweek_1.PNG)
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/socialite_tweek_2.PNG)
+![](https://raw.githubusercontent.com/Ruslan-Aliyev/Travel-Blog-Laravel-5-4/master/Illustrations/socialite_tweek_2.PNG)
 
 https://stackoverflow.com/questions/43053871/socialite-laravel-5-4-facebook-provider
 
@@ -695,7 +695,7 @@ MAIL_ENCRYPTION=tls
 
 Create contact form view, connect it to route then to controller.
 
-Write the controller like this: https://github.com/atabegruslan/Travel-Blog-Laravel-5/blob/master/app/Http/Controllers/EmailController.php
+Write the controller like this: https://github.com/Ruslan-Aliyev/Travel-Blog-Laravel-5-4/blob/master/app/Http/Controllers/EmailController.php
 
 In view, for HTML email template. Here I just show the HTML email that Admin receives:
 ```html
@@ -741,9 +741,9 @@ $slider1.slider
 
 ## Service Provider
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/servicecontainer1.jpg)
+![](https://raw.githubusercontent.com/Ruslan-Aliyev/Travel-Blog-Laravel-5-4/master/Illustrations/servicecontainer1.jpg)
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/servicecontainer2.png)
+![](https://raw.githubusercontent.com/Ruslan-Aliyev/Travel-Blog-Laravel-5-4/master/Illustrations/servicecontainer2.png)
 
 - https://code.tutsplus.com/tutorials/how-to-register-use-laravel-service-providers--cms-28966
 - Then watch these tutorials:
@@ -802,7 +802,7 @@ This can be used to see if Vue works ok in the project.
 
 #### It should look like this:
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/vuetest1.PNG)
+![](https://raw.githubusercontent.com/Ruslan-Aliyev/Travel-Blog-Laravel-5-4/master/Illustrations/vuetest1.PNG)
 
 6. Then you will have to do your own css.
 
@@ -846,7 +846,7 @@ This can be used to see if Vue works ok in the project.
 
 #### It should look like this:
 
-![](https://raw.githubusercontent.com/atabegruslan/Travel-Blog-Laravel-5/master/Illustrations/vuetest2.PNG)
+![](https://raw.githubusercontent.com/Ruslan-Aliyev/Travel-Blog-Laravel-5-4/master/Illustrations/vuetest2.PNG)
 
 ## The Vue frontend relies on AJAXes to your backend API
 
